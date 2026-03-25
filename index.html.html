@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ActualIntelligence — Full Build Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap');
+  :root{--bg:#0f0f10;--s1:#141416;--s2:#1a1a1d;--s3:#212125;--b1:#2c2c31;--b2:#3d3d44;--text:#dddde2;--t2:#8a8a98;--t3:#535360;--green:#4a9e6b;--red:#c06060;--amber:#b09040;--blue:#5888c0;--purple:#8070b8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.6;padding:0}
+  a{color:var(--amber);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{font-family:'IBM Plex Mono',monospace;font-size:.82em;background:var(--s2);border:1px solid var(--b1);padding:.1rem .38rem;color:var(--blue)}
+  pre{font-family:'IBM Plex Mono',monospace;font-size:.78em;background:var(--s2);border:1px solid var(--b1);border-left:3px solid var(--amber);padding:1rem 1.2rem;overflow-x:auto;line-height:1.7;margin:.75rem 0;color:var(--text)}
+  pre code{background:none;border:none;padding:0;color:inherit}
+
+  /* Cover */
+  .cover{background:var(--s1);border-bottom:1px solid var(--b1);padding:3rem 3.5rem 2.5rem;max-width:100%}
+  .cover-label{font-family:'IBM Plex Mono',monospace;font-size:.58rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:.9rem}
+  .cover-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;line-height:1.18;margin-bottom:.7rem}
+  .cover-title span{color:var(--amber)}
+  .cover-sub{font-size:.82rem;color:var(--t2);max-width:580px;line-height:1.72;margin-bottom:1.4rem}
+  .cover-meta{display:flex;gap:2rem;flex-wrap:wrap}
+  .cover-meta-item{font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--t3)}
+  .cover-meta-item strong{color:var(--t2);display:block;margin-bottom:.1rem}
+
+  /* Layout */
+  .wrap{max-width:900px;margin:0 auto;padding:2.5rem 3.5rem 4rem}
+
+  /* Phase headers */
+  .phase{margin-bottom:3rem}
+  .phase-header{display:flex;align-items:center;gap:.85rem;margin-bottom:1.5rem;padding-bottom:.85rem;border-bottom:1px solid var(--b1)}
+  .phase-num{font-family:'IBM Plex Mono',monospace;font-size:.58rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--bg);background:var(--amber);padding:.2rem .55rem;flex-shrink:0}
+  .phase-num.red{background:var(--red)}
+  .phase-num.green{background:var(--green)}
+  .phase-num.blue{background:var(--blue)}
+  .phase-num.purple{background:var(--purple)}
+  .phase-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--text)}
+  .phase-meta{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--t3);margin-left:auto;flex-shrink:0}
+
+  /* Section within phase */
+  .section{margin-bottom:1.8rem}
+  .section-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);font-family:'IBM Plex Mono',monospace;margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem}
+  .section-title::before{content:'';display:inline-block;width:2px;height:10px;background:var(--amber);flex-shrink:0}
+  .section-title.red::before{background:var(--red)}
+  .section-title.green::before{background:var(--green)}
+  .section-title.blue::before{background:var(--blue)}
+
+  /* Body text */
+  p{font-size:.8rem;color:var(--t2);line-height:1.78;margin-bottom:.75rem}
+  p:last-child{margin-bottom:0}
+  strong{color:var(--text);font-weight:600}
+
+  /* Cards */
+  .card-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--b1);border:1px solid var(--b1);margin-bottom:1.2rem}
+  .card{background:var(--s1);padding:.95rem 1rem}
+  .card-title{font-size:.72rem;font-weight:600;color:var(--text);margin-bottom:.32rem;display:flex;align-items:center;gap:.42rem}
+  .card-body{font-size:.68rem;color:var(--t2);line-height:1.68}
+  .card-cost{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.35rem}
+  .card-cost span{color:var(--green)}
+
+  /* Alert boxes */
+  .alert{border:1px solid;padding:.82rem 1rem;margin:.85rem 0;font-size:.74rem;line-height:1.68}
+  .alert-warn{border-color:rgba(192,96,96,.35);background:rgba(192,96,96,.04);color:var(--t2)}
+  .alert-warn strong{color:var(--red)}
+  .alert-info{border-color:rgba(88,136,192,.3);background:rgba(88,136,192,.04);color:var(--t2)}
+  .alert-info strong{color:var(--blue)}
+  .alert-tip{border-color:rgba(176,144,64,.3);background:rgba(176,144,64,.04);color:var(--t2)}
+  .alert-tip strong{color:var(--amber)}
+
+  /* Steps list */
+  .steps{display:flex;flex-direction:column;gap:.55rem;margin:.75rem 0}
+  .step{display:flex;gap:.82rem;align-items:flex-start}
+  .step-n{font-family:'IBM Plex Mono',monospace;font-size:.62rem;font-weight:600;color:var(--bg);background:var(--b2);width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+  .step-n.done{background:var(--green)}
+  .step-body{font-size:.76rem;color:var(--t2);line-height:1.68;flex:1}
+  .step-body strong{color:var(--text)}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;border:1px solid var(--b1);font-size:.72rem;margin:.85rem 0}
+  thead tr{background:var(--s2)}
+  th{font-family:'IBM Plex Mono',monospace;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);padding:.65rem .88rem;text-align:left;border-bottom:1px solid var(--b1)}
+  td{padding:.62rem .88rem;color:var(--t2);border-bottom:1px solid var(--b1)}
+  td:first-child{color:var(--text);font-weight:500}
+  tr:last-child td{border-bottom:none}
+  .tag{font-family:'IBM Plex Mono',monospace;font-size:.58rem;padding:.1rem .38rem;border:1px solid;display:inline-block}
+  .tag.red{border-color:rgba(192,96,96,.4);color:var(--red)}
+  .tag.green{border-color:rgba(74,158,107,.4);color:var(--green)}
+  .tag.amber{border-color:rgba(176,144,64,.4);color:var(--amber)}
+  .tag.blue{border-color:rgba(88,136,192,.4);color:var(--blue)}
+
+  /* Timeline */
+  .timeline{border-left:2px solid var(--b2);padding-left:1.5rem;margin:.85rem 0;display:flex;flex-direction:column;gap:1.1rem}
+  .tl-item{position:relative}
+  .tl-item::before{content:'';position:absolute;left:-1.62rem;top:.28rem;width:8px;height:8px;border-radius:50%;background:var(--b2);border:1.5px solid var(--bg)}
+  .tl-item.active::before{background:var(--amber);border-color:var(--amber)}
+  .tl-week{font-family:'IBM Plex Mono',monospace;font-size:.58rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:.22rem}
+  .tl-title{font-size:.76rem;font-weight:600;color:var(--text);margin-bottom:.18rem}
+  .tl-desc{font-size:.68rem;color:var(--t2);line-height:1.65}
+
+  /* Divider */
+  hr{border:none;border-top:1px solid var(--b1);margin:2.5rem 0}
+
+  /* Checklist */
+  .checklist{display:flex;flex-direction:column;gap:.42rem;margin:.75rem 0}
+  .check-item{display:flex;gap:.62rem;align-items:flex-start;font-size:.74rem;color:var(--t2);line-height:1.62}
+  .check-item::before{content:'□';color:var(--b2);font-size:.85rem;flex-shrink:0;margin-top:-.05rem}
+  .check-item strong{color:var(--text)}
+
+  @media print{
+    body{background:#fff;color:#111}
+    .cover{background:#f5f5f4;border-color:#ddd}
+    pre{background:#f0f0f0;border-color:#ccc}
+    .card{background:#fafafa}
+  }
+  @media(max-width:640px){
+    .cover{padding:2rem 1.5rem}
+    .wrap{padding:1.5rem}
+    .card-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-label">ActualIntelligence · Internal Documentation</div>
+  <div class="cover-title">Full Build Roadmap<br><span>Backend, Security & Scale</span></div>
+  <div class="cover-sub">Everything you need to take ActualIntelligence from a polished single-file frontend to a production-grade, revenue-generating platform — with a real backend, hardened security, and a clear path to scale.</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><strong>Version</strong>1.0 — March 2026</div>
+    <div class="cover-meta-item"><strong>Product</strong>ActualIntelligence.html</div>
+    <div class="cover-meta-item"><strong>Current State</strong>Single HTML file, no backend</div>
+    <div class="cover-meta-item"><strong>Target State</strong>Full-stack SaaS platform</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══ PHASE 1 ═══ -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num">Phase 1</div>
+    <div class="phase-title">Launch — Deploy the current file</div>
+    <div class="phase-meta">This week · $0–$20</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Hosting</div>
+    <p>Your current <code>ActualIntelligence.html</code> is a complete static site. Deploy it to <strong>Vercel</strong> — drag the file to <a href="https://vercel.com/new" target="_blank">vercel.com/new</a>, get a live HTTPS URL in 60 seconds. Free tier covers everything you need at launch.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🌐 Vercel (Recommended)</div>
+        <div class="card-body">Free static hosting, global CDN, auto SSL, custom domain support, instant deploys.</div>
+        <div class="card-cost">Cost: <span>Free forever for static sites</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">☁️ Cloudflare Pages</div>
+        <div class="card-body">Alternative to Vercel. Slightly faster edge network, same zero-cost model for static files.</div>
+        <div class="card-cost">Cost: <span>Free forever for static sites</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🌍 Custom Domain</div>
+        <div class="card-body">Buy <code>actualintelligence.com</code> or <code>actualintel.ai</code> on Namecheap. Point DNS to Vercel in 2 clicks.</div>
+        <div class="card-cost">Cost: <span>$12–$20/yr</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔒 SSL / HTTPS</div>
+        <div class="card-body">Vercel provisions a free Let's Encrypt certificate automatically. Nothing to configure.</div>
+        <div class="card-cost">Cost: <span>Included free</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">Pre-Launch Checklist</div>
+    <div class="checklist">
+      <div class="check-item">Replace all <strong>placeholder toast messages</strong> ("Loading story…") with real article links or content</div>
+      <div class="check-item">Remove or replace all <strong>href="#" footer links</strong> with real pages or working modals</div>
+      <div class="check-item">Test on <strong>iPhone Safari</strong> and <strong>Android Chrome</strong> at 375px viewport width</div>
+      <div class="check-item">Run through <strong>PageSpeed Insights</strong> — target 90+ performance score</div>
+      <div class="check-item">Add <strong>favicon.ico</strong> — even a simple square with "AI" text works</div>
+      <div class="check-item">Verify <strong>dark/light mode</strong> persists correctly on reload in both states</div>
+      <div class="check-item">Check all <strong>modals close on Escape</strong> and outside click on mobile too</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 2 ═══ -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num">Phase 2</div>
+    <div class="phase-title">Real Data — Live APIs</div>
+    <div class="phase-meta">Week 2–3 · $0–$80/mo</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title blue">News APIs</div>
+    <table>
+      <thead><tr><th>Service</th><th>What it provides</th><th>Free tier</th><th>Paid</th><th>Rec.</th></tr></thead>
+      <tbody>
+        <tr><td>NewsAPI.org</td><td>Headlines from 80,000+ sources, category filters, search</td><td>100 req/day, dev only</td><td>$50/mo</td><td><span class="tag green">Best</span></td></tr>
+        <tr><td>GNews API</td><td>Global news, good world coverage</td><td>100 req/day</td><td>$19/mo</td><td><span class="tag amber">Good</span></td></tr>
+        <tr><td>The Guardian API</td><td>Premium journalism, full article text</td><td>Unlimited with key</td><td>Free</td><td><span class="tag blue">Supplement</span></td></tr>
+        <tr><td>Reuters / AP Wire</td><td>Professional wire feeds</td><td>None</td><td>Enterprise</td><td><span class="tag red">Later</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title blue">Market Data APIs</div>
+    <table>
+      <thead><tr><th>Service</th><th>What it provides</th><th>Free tier</th><th>Paid</th><th>Rec.</th></tr></thead>
+      <tbody>
+        <tr><td>Polygon.io</td><td>Real-time stocks, options, forex, crypto</td><td>Delayed 15min</td><td>$29/mo</td><td><span class="tag green">Best</span></td></tr>
+        <tr><td>Alpha Vantage</td><td>Stocks + forex + crypto, good history</td><td>5 calls/min</td><td>$50/mo</td><td><span class="tag amber">Good</span></td></tr>
+        <tr><td>CoinGecko</td><td>Crypto prices, market caps, history</td><td>Unlimited (rate limited)</td><td>Free / $129/mo pro</td><td><span class="tag green">Use free tier</span></td></tr>
+        <tr><td>Yahoo Finance (unofficial)</td><td>Stocks via unofficial scraping</td><td>Free, unreliable</td><td>N/A</td><td><span class="tag red">Avoid</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title blue">API Architecture — How to Wire It Up</div>
+    <p>Never call paid APIs directly from the browser. It exposes your API keys and has no caching. The correct pattern is a <strong>serverless proxy</strong>:</p>
+    <pre><code>Browser → fetch('/api/news') → Vercel Serverless Function → NewsAPI
+                                    ↕ caches for 5 min
+                               no key exposure, no CORS issues</code></pre>
+    <p>Create <code>/api/news.js</code> on Vercel:</p>
+    <pre><code>// api/news.js — Vercel serverless function
+export default async function handler(req, res) {
+  // Simple in-memory cache (5 min)
+  const cache = global._newsCache;
+  if (cache && Date.now() - cache.ts < 300000) {
+    return res.json(cache.data);
+  }
+
+  const r = await fetch(
+    `https://newsapi.org/v2/top-headlines?language=en&pageSize=20`,
+    { headers: { 'X-Api-Key': process.env.NEWS_API_KEY } }
+  );
+  const data = await r.json();
+
+  global._newsCache = { data, ts: Date.now() };
+  res.setHeader('Cache-Control', 's-maxage=300');
+  res.json(data);
+}</code></pre>
+    <p>Set your API key as an <strong>environment variable</strong> in Vercel dashboard — never hardcode it in the file. Then in your HTML:</p>
+    <pre><code>async function loadLiveNews() {
+  const res = await fetch('/api/news');
+  const { articles } = await res.json();
+  const mapped = articles.map(a => ({
+    hl: a.title,
+    sum: a.description,
+    url: a.url,
+    mins: Math.floor((Date.now() - new Date(a.publishedAt)) / 60000),
+    // ... map to your NEWS schema
+  }));
+  renderNews('breakingGrid', mapped.slice(0, 6));
+}</code></pre>
+    <div class="alert alert-tip"><strong>Tip:</strong> Start with CoinGecko for crypto (completely free) and The Guardian API for world news (free unlimited). You can launch with real data at literally $0/mo before committing to paid APIs.</div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 3 ═══ -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num green">Phase 3</div>
+    <div class="phase-title">Real Backend — Database, Auth & Users</div>
+    <div class="phase-meta">Month 1–2 · $0–$25/mo</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title green">Why You Need a Backend</div>
+    <p>Right now, votes, bookmarks, and comments live in <code>localStorage</code> — they vanish when the user clears their browser, don't sync across devices, and can't be shared. A real backend gives you:</p>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-body"><strong>Persistent user data</strong> — bookmarks and vote history survive browser clears and work on any device</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-body"><strong>Real community</strong> — comments visible to all users, not just the person who posted them</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-body"><strong>Vote integrity</strong> — prevent users from voting 100 times; tie votes to accounts</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-body"><strong>Subscriber list ownership</strong> — email addresses you own, not trapped in a third-party tool</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-body"><strong>Analytics</strong> — understand which stories, tools, and tabs actually get engagement</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title green">Recommended Stack: Supabase</div>
+    <p><strong>Supabase</strong> is a hosted Postgres database with a built-in REST API, real-time subscriptions, file storage, and OAuth authentication — all accessible from the browser via a JavaScript client. No server code needed for basic operations.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🗃️ Database (Postgres)</div>
+        <div class="card-body">Full relational DB. Store users, votes, comments, bookmarks, tool submissions, subscriber emails.</div>
+        <div class="card-cost">Cost: <span>Free up to 50,000 rows / 500MB</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔐 Auth</div>
+        <div class="card-body">Email/password, Google OAuth, GitHub OAuth. JWT tokens, session management — all handled.</div>
+        <div class="card-cost">Cost: <span>Free up to 50,000 monthly active users</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Realtime</div>
+        <div class="card-body">Subscribe to DB changes via WebSocket. New comments appear instantly without polling.</div>
+        <div class="card-cost">Cost: <span>Free up to 200 concurrent connections</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🛡️ Row Level Security</div>
+        <div class="card-body">SQL policies that control who can read/write which rows. Users can only edit their own data.</div>
+        <div class="card-cost">Cost: <span>Included free — critical for security</span></div>
+      </div>
+    </div>
+
+    <p>Install the client and initialize:</p>
+    <pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;&lt;/script&gt;
+&lt;script&gt;
+const supabase = window.supabase.createClient(
+  'https://YOUR_PROJECT.supabase.co',
+  'YOUR_ANON_PUBLIC_KEY'  // This key is safe to expose — it's public by design
+);
+&lt;/script&gt;</code></pre>
+
+    <div class="alert alert-info"><strong>Note:</strong> The Supabase "anon" key is intentionally public. Security is enforced by Row Level Security policies in the database — not by hiding the key. This is the correct architecture.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title green">Database Schema</div>
+    <p>Run this SQL in the Supabase dashboard to create your tables:</p>
+    <pre><code>-- Users (auto-created by Supabase Auth, just add profile data)
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users PRIMARY KEY,
+  username TEXT UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Comments
+CREATE TABLE comments (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id),
+  text TEXT NOT NULL CHECK (length(text) BETWEEN 1 AND 1000),
+  likes INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Votes (one per user per story)
+CREATE TABLE votes (
+  user_id UUID REFERENCES profiles(id),
+  story_id INT NOT NULL,
+  direction TEXT CHECK (direction IN ('up','down')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, story_id)
+);
+
+-- Bookmarks
+CREATE TABLE bookmarks (
+  user_id UUID REFERENCES profiles(id),
+  story_id INT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, story_id)
+);
+
+-- Subscribers
+CREATE TABLE subscribers (
+  id BIGSERIAL PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  subscribed_at TIMESTAMPTZ DEFAULT NOW(),
+  active BOOLEAN DEFAULT TRUE
+);
+
+-- Tool submissions
+CREATE TABLE tool_submissions (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  url TEXT NOT NULL,
+  category TEXT NOT NULL,
+  pricing TEXT NOT NULL,
+  description TEXT NOT NULL,
+  contact_email TEXT NOT NULL,
+  plan TEXT CHECK (plan IN ('standard','featured')),
+  stripe_session_id TEXT,
+  status TEXT DEFAULT 'pending',
+  submitted_at TIMESTAMPTZ DEFAULT NOW()
+);</code></pre>
+
+    <p>Then add Row Level Security so users can only touch their own rows:</p>
+    <pre><code>-- Enable RLS on all tables
+ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE votes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bookmarks ENABLE ROW LEVEL SECURITY;
+
+-- Comments: anyone can read, only author can delete their own
+CREATE POLICY "Anyone can read comments" ON comments FOR SELECT USING (TRUE);
+CREATE POLICY "Users insert own comments" ON comments FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users delete own comments" ON comments FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- Votes: users can only read/write their own
+CREATE POLICY "Users manage own votes" ON votes
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- Bookmarks: users can only read/write their own
+CREATE POLICY "Users manage own bookmarks" ON bookmarks
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);</code></pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title green">Replacing localStorage with Supabase</div>
+    <p>Replace your current bookmark and comment functions with real DB calls:</p>
+    <pre><code>// OLD (localStorage)
+function toggleBk(e, id) {
+  saved.push(id);
+  localStorage.setItem('ai_saved', JSON.stringify(saved));
+}
+
+// NEW (Supabase)
+async function toggleBk(e, id) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) { openLoginModal(); return; }
+
+  const { data: existing } = await supabase
+    .from('bookmarks')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('story_id', id)
+    .single();
+
+  if (existing) {
+    await supabase.from('bookmarks').delete()
+      .eq('user_id', user.id).eq('story_id', id);
+    showToast('Removed from saved');
+  } else {
+    await supabase.from('bookmarks').insert({ user_id: user.id, story_id: id });
+    showToast('🔖 Saved');
+  }
+  renderSaved();
+}</code></pre>
+  </div>
+</div>
+
+<!-- ═══ PHASE 4 ═══ -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num red">Phase 4</div>
+    <div class="phase-title">Security — Hardening Everything</div>
+    <div class="phase-meta">Ongoing · Critical</div>
+  </div>
+
+  <div class="alert alert-warn"><strong>Read this before going live.</strong> Even a static HTML file can be exploited. A site that handles user-generated comments, payments, and email addresses has significant attack surface. This section covers every layer.</div>
+
+  <div class="section">
+    <div class="section-title red">1. API Key Security</div>
+    <p>The single most important rule: <strong>never expose secret API keys in frontend code.</strong></p>
+    <table>
+      <thead><tr><th>Key Type</th><th>Can it be in HTML/JS?</th><th>Where it belongs</th></tr></thead>
+      <tbody>
+        <tr><td>Supabase anon key</td><td><span class="tag green">Yes — safe by design</span></td><td>Frontend JS, protected by RLS policies</td></tr>
+        <tr><td>NewsAPI key</td><td><span class="tag red">Never</span></td><td>Vercel environment variable only</td></tr>
+        <tr><td>Polygon.io key</td><td><span class="tag red">Never</span></td><td>Vercel environment variable only</td></tr>
+        <tr><td>Stripe secret key</td><td><span class="tag red">Never, ever</span></td><td>Server-side only, never leave the backend</td></tr>
+        <tr><td>Stripe publishable key</td><td><span class="tag green">Yes — intentionally public</span></td><td>Frontend JS for Stripe.js initialization</td></tr>
+        <tr><td>ConvertKit API key</td><td><span class="tag red">Never</span></td><td>Vercel environment variable only</td></tr>
+      </tbody>
+    </table>
+    <p>Set secret keys in Vercel: Dashboard → Your Project → Settings → Environment Variables. They become available as <code>process.env.KEY_NAME</code> in serverless functions and are never sent to the browser.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">2. Content Security Policy (CSP)</div>
+    <p>A CSP header tells browsers which external resources are allowed to load. Without one, a single XSS vulnerability can inject scripts from any domain. Add this to your Vercel config:</p>
+    <pre><code>// vercel.json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://api.polygon.io https://newsapi.org; frame-ancestors 'none';"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        }
+      ]
+    }
+  ]
+}</code></pre>
+    <div class="alert alert-tip"><strong>Tip:</strong> Use <a href="https://securityheaders.com" target="_blank">securityheaders.com</a> to scan your live site after deploying. Aim for an A or A+ rating.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">3. XSS — Cross-Site Scripting</div>
+    <p>XSS is the most common web vulnerability. It happens when user input is inserted into the page as raw HTML, allowing attackers to inject scripts that steal session tokens, redirect users, or mine crypto.</p>
+    <p><strong>The current code has an XSS risk in the community tab.</strong> When a user posts a comment and it's rendered with <code>innerHTML</code>, any HTML tags in the comment text will execute.</p>
+    <pre><code>// VULNERABLE — never do this with user input
+el.innerHTML = userComment;
+
+// SAFE — escape all user-generated text before rendering
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Use in comment render:
+el.innerHTML = `&lt;div class="ctext"&gt;${escapeHtml(comment.text)}&lt;/div&gt;`;</code></pre>
+    <p>The rule is simple: <strong>never use <code>innerHTML</code> with user-provided text.</strong> Use <code>textContent</code> for plain text, or escape all HTML before injecting.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">4. Rate Limiting</div>
+    <p>Without rate limiting, a single person can submit 10,000 comments, exhaust your API quota in minutes, or hammer your serverless functions with requests.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🚦 Vercel / Cloudflare WAF</div>
+        <div class="card-body">Add rate limiting rules at the edge. Cloudflare free tier includes basic rate limiting — 10 rules, protects against floods.</div>
+        <div class="card-cost">Cost: <span>Free on Cloudflare</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔁 Upstash Redis</div>
+        <div class="card-body">Serverless Redis for token-bucket rate limiting in your API functions. Fastest option for per-user limits.</div>
+        <div class="card-cost">Cost: <span>Free up to 10,000 req/day</span></div>
+      </div>
+    </div>
+    <p>Basic rate limiting in a Vercel serverless function using Upstash:</p>
+    <pre><code>import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(10, "1 m"), // 10 requests per minute per IP
+});
+
+export default async function handler(req, res) {
+  const ip = req.headers['x-forwarded-for'] || 'unknown';
+  const { success } = await ratelimit.limit(ip);
+  if (!success) return res.status(429).json({ error: 'Too many requests' });
+  // ... rest of handler
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">5. Input Validation & Sanitization</div>
+    <p>Every piece of data that comes from a user must be validated before it touches your database or gets rendered on screen.</p>
+    <pre><code>// Server-side validation in your API route (never trust frontend-only validation)
+function validateComment(text) {
+  if (typeof text !== 'string') return false;
+  if (text.trim().length < 1) return false;
+  if (text.length > 1000) return false;
+  if (/[<>]/.test(text)) return false;  // Reject raw HTML tags
+  return true;
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length < 255;
+}
+
+function validateUrl(url) {
+  try {
+    const u = new URL(url);
+    return ['http:', 'https:'].includes(u.protocol);
+  } catch { return false; }
+}</code></pre>
+    <div class="alert alert-warn"><strong>Never rely on frontend validation alone.</strong> Anyone can bypass your HTML form — they'll call your API directly with raw HTTP requests. All validation must be re-run server-side.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">6. Stripe Payment Security</div>
+    <p>Stripe is secure by design — but only if you implement it correctly. The correct flow for your tool submission payments:</p>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-body">User fills out the Submit Tool form and clicks "Continue to Payment" — this calls your <strong>backend</strong> (not Stripe directly)</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-body">Your backend (Vercel function) validates the form data, then calls <code>stripe.checkout.sessions.create()</code> using your <strong>secret key</strong></div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-body">Stripe returns a <code>session.url</code> — your backend sends this URL to the frontend and the user is redirected to Stripe's hosted checkout page</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-body">After payment, Stripe calls your <strong>webhook endpoint</strong> (a separate serverless function) to confirm payment succeeded</div></div>
+      <div class="step"><div class="step-n">5</div><div class="step-body">Your webhook verifies the Stripe signature (to confirm it's genuinely from Stripe), then writes the approved submission to your database</div></div>
+    </div>
+    <pre><code>// api/create-checkout.js — Vercel function
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export default async function handler(req, res) {
+  const { toolName, email, plan } = req.body;
+
+  // Validate inputs server-side
+  if (!toolName || !validateEmail(email)) {
+    return res.status(400).json({ error: 'Invalid input' });
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: plan === 'featured' ? 'subscription' : 'payment',
+    line_items: [{
+      price: plan === 'featured'
+        ? process.env.STRIPE_FEATURED_PRICE_ID   // $149/mo recurring
+        : process.env.STRIPE_STANDARD_PRICE_ID,  // $49 one-time
+      quantity: 1,
+    }],
+    customer_email: email,
+    metadata: { toolName, plan },
+    success_url: `${process.env.SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.SITE_URL}/`,
+  });
+
+  res.json({ url: session.url });
+}
+
+// api/stripe-webhook.js — receives Stripe events
+export default async function handler(req, res) {
+  const sig = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body, sig, process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    // Now safe to write to database — payment confirmed
+    await supabase.from('tool_submissions').insert({
+      name: session.metadata.toolName,
+      stripe_session_id: session.id,
+      status: 'approved',
+    });
+  }
+  res.json({ received: true });
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">7. Spam & Bot Protection</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🤖 Cloudflare Turnstile</div>
+        <div class="card-body">Privacy-friendly CAPTCHA replacement. Invisible to real users, blocks bots. Drop-in for forms.</div>
+        <div class="card-cost">Cost: <span>Free, no limits</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📧 Email Verification</div>
+        <div class="card-body">Supabase Auth sends a confirmation email before account activation. Blocks throwaway email spam.</div>
+        <div class="card-cost">Cost: <span>Included in Supabase free tier</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🕵️ Honeypot Fields</div>
+        <div class="card-body">Add a hidden input field to forms. Bots fill everything; humans don't see it. Reject submissions where it's filled.</div>
+        <div class="card-cost">Cost: <span>Free — 5 lines of code</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⏱️ Submission Timing</div>
+        <div class="card-body">Track time between form load and submission. Real humans take 5–120 seconds. Reject if under 2 seconds.</div>
+        <div class="card-cost">Cost: <span>Free — 3 lines of code</span></div>
+      </div>
+    </div>
+    <pre><code>// Honeypot implementation
+// In your HTML form — hidden from real users via CSS:
+&lt;input type="text" name="website" tabindex="-1"
+  style="position:absolute;left:-9999px" autocomplete="off"&gt;
+
+// In your API handler — reject if honeypot was filled:
+if (req.body.website) {
+  return res.status(400).json({ error: 'Invalid submission' });
+  // Don't say "bot detected" — just silently reject
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">8. CORS Policy</div>
+    <p>Cross-Origin Resource Sharing controls which domains can call your APIs. By default, your Vercel serverless functions should only accept requests from your own domain.</p>
+    <pre><code>// Add to every API handler
+export default async function handler(req, res) {
+  // Only allow your own domain
+  const allowed = ['https://actualintelligence.com', 'http://localhost:3000'];
+  const origin = req.headers.origin;
+
+  if (allowed.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  // ... rest of handler
+}</code></pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">9. Dependency Security</div>
+    <p>You currently have zero npm dependencies — this is actually a security advantage for the single-file version. When you move to Next.js, follow these rules:</p>
+    <div class="checklist">
+      <div class="check-item">Run <code>npm audit</code> before every deploy — fix critical and high severity issues</div>
+      <div class="check-item">Pin dependency versions in <code>package-lock.json</code> — don't use <code>^</code> for security-critical packages</div>
+      <div class="check-item">Enable <strong>Dependabot</strong> on GitHub — auto-creates PRs for security patches</div>
+      <div class="check-item">Never load third-party scripts without <strong>Subresource Integrity (SRI)</strong> hashes</div>
+      <div class="check-item">Regularly audit which CDN scripts the HTML loads (Google Fonts, cdnjs) — all currently safe</div>
+    </div>
+    <pre><code>&lt;!-- SRI hash ensures the script hasn't been tampered with --&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+  integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+  crossorigin="anonymous"&gt;&lt;/script&gt;</code></pre>
+  </div>
+
+  <div class="section">
+    <div class="section-title red">10. Privacy & Legal</div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">📋 GDPR (EU users)</div>
+        <div class="card-body">If you collect emails or use analytics, you need a Privacy Policy and a cookie consent mechanism. Your cookie banner is already built — wire it to actually block analytics until accepted.</div>
+        <div class="card-cost">Cost: <span>Free — use iubenda.com for auto-generated policy</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🇺🇸 CCPA (California users)</div>
+        <div class="card-body">California users have the right to know what data you collect and to request deletion. Add a "Delete my data" option in user account settings.</div>
+        <div class="card-cost">Cost: <span>Free — Supabase makes data deletion easy</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📧 CAN-SPAM (Email)</div>
+        <div class="card-body">Every marketing email must include your physical address, an unsubscribe link that works within 10 days, and no deceptive subject lines.</div>
+        <div class="card-cost">Cost: <span>Free — ConvertKit/Mailchimp handle this automatically</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚖️ Terms of Service</div>
+        <div class="card-body">You need ToS that covers user-generated content (you can remove harmful content), payment terms, and disclaimer that market data is not financial advice.</div>
+        <div class="card-cost">Cost: <span>Free — use Termly.io for auto-generated ToS</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PHASE 5 ═══ -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num blue">Phase 5</div>
+    <div class="phase-title">Monetization — Revenue Streams</div>
+    <div class="phase-meta">Month 2–3 · Revenue generating</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title blue">Revenue Model</div>
+    <table>
+      <thead><tr><th>Stream</th><th>How</th><th>Potential MRR</th><th>Effort</th></tr></thead>
+      <tbody>
+        <tr><td>Tool listings (standard)</td><td>$49 one-time via Stripe</td><td>$490 at 10/mo</td><td><span class="tag green">Low</span></td></tr>
+        <tr><td>Tool listings (featured)</td><td>$149/mo recurring via Stripe</td><td>$745 at 5 clients</td><td><span class="tag green">Low</span></td></tr>
+        <tr><td>Newsletter sponsorship</td><td>$150–$400 per issue</td><td>$600–$1,600 at 4 issues/mo</td><td><span class="tag amber">Medium</span></td></tr>
+        <tr><td>Affiliate links</td><td>20–30% recurring on tool signups</td><td>$200–$2,000 passive</td><td><span class="tag green">Low</span></td></tr>
+        <tr><td>Pro subscriptions</td><td>$9/mo — email alerts, API access</td><td>$900 at 100 users</td><td><span class="tag red">High</span></td></tr>
+        <tr><td>Sponsored content</td><td>Native stories labeled "Sponsored"</td><td>$500–$2,000 per story</td><td><span class="tag amber">Medium</span></td></tr>
+      </tbody>
+    </table>
+    <div class="alert alert-tip"><strong>Start with tool listings and affiliates.</strong> Both require minimal ongoing work and can generate revenue on day one. Newsletter sponsorships become viable once you hit 1,000+ subscribers.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title blue">Affiliate Programs (Immediate)</div>
+    <p>Every tool in your directory has an affiliate program. Sign up and add your referral link to each tool card. This is passive income that scales with traffic and costs zero time to maintain.</p>
+    <table>
+      <thead><tr><th>Tool</th><th>Program</th><th>Commission</th></tr></thead>
+      <tbody>
+        <tr><td>Cursor</td><td>cursor.com/affiliates</td><td>20% recurring for 12 months</td></tr>
+        <tr><td>Jasper AI</td><td>jasper.ai/affiliates</td><td>25% recurring lifetime</td></tr>
+        <tr><td>ElevenLabs</td><td>elevenlabs.io/affiliates</td><td>22% recurring</td></tr>
+        <tr><td>Perplexity</td><td>perplexity.ai/pro — affiliate link</td><td>$10 per Pro signup</td></tr>
+        <tr><td>Canva</td><td>canva.com/affiliates</td><td>$36 per Pro signup</td></tr>
+        <tr><td>Notion</td><td>notion.so/affiliates</td><td>$16 per signup</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ PHASE 6 ═══ -->
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num purple">Phase 6</div>
+    <div class="phase-title">Scale — Next.js Migration & Growth</div>
+    <div class="phase-meta">Month 3+ · Long-term</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Why Migrate to Next.js</div>
+    <p>The single HTML file is excellent for launching but has one critical limitation: <strong>every story needs its own URL for Google to index it.</strong> Without individual story pages, you will not rank in search results and you cannot drive organic traffic. Next.js solves this with server-side rendering and file-based routing.</p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">📈 SEO</div>
+        <div class="card-body">Each story at its own URL. Google indexes every article. Target long-tail keywords like "OpenAI o4 reasoning model explained."</div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Performance</div>
+        <div class="card-body">Server-side rendering means first load shows real content — not skeleton loaders. Core Web Vitals score improves significantly.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔗 Shareable Stories</div>
+        <div class="card-body">Users can share a direct link to a specific article. Essential for social distribution and email newsletters.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📱 Open Graph</div>
+        <div class="card-body">Per-story OG images and metadata mean links shared on X/LinkedIn show a real preview instead of a generic site thumbnail.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Migration Path</div>
+    <div class="timeline">
+      <div class="tl-item active">
+        <div class="tl-week">Now</div>
+        <div class="tl-title">Single HTML file on Vercel</div>
+        <div class="tl-desc">Everything works. No SEO. No individual story URLs. Perfect for validating the concept and onboarding first users.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">Month 1–2</div>
+        <div class="tl-title">Add serverless functions</div>
+        <div class="tl-desc">Keep the single HTML file but add <code>/api/news</code>, <code>/api/stocks</code>, <code>/api/checkout</code> Vercel functions. Wire Supabase for auth + comments + bookmarks.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">Month 3</div>
+        <div class="tl-title">Next.js migration</div>
+        <div class="tl-desc">Port the HTML/CSS/JS into React components. Keep the exact same design. Add <code>/story/[slug]</code> dynamic routes. Enable ISR for cached SSR pages.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">Month 4+</div>
+        <div class="tl-title">SEO content flywheel</div>
+        <div class="tl-desc">Indexed story pages start ranking. Each new story is a new indexed URL. Build topical authority in AI, markets, and world news.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MASTER CHECKLIST ═══ -->
+<hr>
+<div class="phase">
+  <div class="phase-header">
+    <div class="phase-num">Summary</div>
+    <div class="phase-title">Master Launch Checklist</div>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">🚀 Week 1 — Ship It</div>
+      <div class="card-body">
+        <div class="checklist" style="margin-top:.35rem">
+          <div class="check-item">Deploy to Vercel</div>
+          <div class="check-item">Buy custom domain</div>
+          <div class="check-item">Add vercel.json security headers</div>
+          <div class="check-item">Escape all innerHTML with user content</div>
+          <div class="check-item">Set up Google Analytics or Plausible</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📡 Week 2 — Real Data</div>
+      <div class="card-body">
+        <div class="checklist" style="margin-top:.35rem">
+          <div class="check-item">Wire CoinGecko (free crypto data)</div>
+          <div class="check-item">Wire Guardian API (free news)</div>
+          <div class="check-item">Add /api serverless proxy functions</div>
+          <div class="check-item">Store API keys as env variables only</div>
+          <div class="check-item">Add rate limiting to all API routes</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 Week 3 — Money</div>
+      <div class="card-body">
+        <div class="checklist" style="margin-top:.35rem">
+          <div class="check-item">Create Stripe account</div>
+          <div class="check-item">Wire Stripe checkout to Submit Tool form</div>
+          <div class="check-item">Set up Stripe webhook endpoint</div>
+          <div class="check-item">Wire ConvertKit to Subscribe modal</div>
+          <div class="check-item">Sign up for 5 affiliate programs</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">👤 Month 2 — Users</div>
+      <div class="card-body">
+        <div class="checklist" style="margin-top:.35rem">
+          <div class="check-item">Set up Supabase project</div>
+          <div class="check-item">Run DB schema SQL</div>
+          <div class="check-item">Enable Row Level Security policies</div>
+          <div class="check-item">Replace localStorage with Supabase calls</div>
+          <div class="check-item">Add Google OAuth login</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--b1);font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--t3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+  <span>ActualIntelligence · Internal Roadmap v1.0</span>
+  <span>Generated March 2026</span>
+</div>
+
+</div>
+</body>
+</html>
